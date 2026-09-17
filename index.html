@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#174c3e">
+  <title>Monitoramento de Cunicultura</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="page">
+    <header class="header">
+      <div class="brand-icon" aria-hidden="true">➰</div>
+      <div class="title-area">
+        <p class="eyebrow">Estação ambiental</p>
+        <h1>Monitoramento de Cunicultura</h1>
+      </div>
+      <div class="connection online" id="connection-status">
+        <span class="connection-dot"></span>
+        <span id="connection-text">Simulação ativa</span>
+      </div>
+    </header>
+
+    <section class="dashboard" aria-label="Leitura atual">
+      <article class="card temperature">
+        <div class="card-top"><span class="icon">🌡️</span><span class="now">Agora</span></div>
+        <p class="label">Temperatura</p>
+        <p class="value"><span id="temp">--</span><span class="unit">°C</span></p>
+      </article>
+
+      <article class="card humidity">
+        <div class="card-top"><span class="icon">💧</span><span class="now">Agora</span></div>
+        <p class="label">Umidade do ar</p>
+        <p class="value"><span id="humidity">--</span><span class="unit">%</span></p>
+      </article>
+
+      <article class="card fan-card">
+        <div class="card-top"><span class="icon fan-icon" id="fan-icon">🌀</span><span class="now">Agora</span></div>
+        <p class="label">Status do ventilador</p>
+        <p class="value status-value" id="fan-status">Aguardando</p>
+      </article>
+    </section>
+
+    <section class="summary comfortable" id="summary" aria-live="polite">
+      <div class="summary-icon">〽</div>
+      <div>
+        <strong id="environment-status">Ambiente dentro do critério</strong>
+        <p id="environment-message">Aguardando a próxima leitura.</p>
+      </div>
+      <span id="updated-at">Ainda não atualizado</span>
+    </section>
+
+    <section class="panel criteria-panel">
+      <div class="section-heading">
+        <div><p class="eyebrow">Regra de acionamento</p><h2>Critérios do ventilador</h2></div>
+        <button class="button outline" id="toggle-simulation" type="button">⏸ Pausar</button>
+      </div>
+      <p class="description">
+        O ventilador liga quando a temperatura é igual ou superior ao limite
+        <strong>e</strong> a umidade também é igual ou superior ao limite.
+      </p>
+      <div class="criteria-controls">
+        <label>
+          Temperatura mínima para ligar
+          <span><input id="temperature-limit" type="number" inputmode="decimal" min="15" max="45" value="30"> °C</span>
+        </label>
+        <label>
+          Umidade mínima para ligar
+          <span><input id="humidity-limit" type="number" inputmode="decimal" min="10" max="100" value="50"> %</span>
+        </label>
+        <div class="rule" id="rule-expression">T ≥ 30 °C <b>e</b> U ≥ 50%</div>
+        <button class="button primary" id="new-reading" type="button">↻ Nova leitura</button>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="section-heading">
+        <div><p class="eyebrow">Resumo histórico</p><h2>Estatísticas das leituras</h2></div>
+        <span class="counter" id="record-count">0 registros</span>
+      </div>
+      <div class="stats-layout">
+        <article class="stats-card">
+          <h3>🌡️ Temperatura</h3>
+          <dl class="stats-grid">
+            <div><dt>Máxima</dt><dd id="temp-max">--</dd></div>
+            <div><dt>Mínima</dt><dd id="temp-min">--</dd></div>
+            <div><dt>Média</dt><dd id="temp-mean">--</dd></div>
+            <div><dt>Mediana</dt><dd id="temp-median">--</dd></div>
+          </dl>
+        </article>
+        <article class="stats-card">
+          <h3>💧 Umidade</h3>
+          <dl class="stats-grid">
+            <div><dt>Máxima</dt><dd id="humidity-max">--</dd></div>
+            <div><dt>Mínima</dt><dd id="humidity-min">--</dd></div>
+            <div><dt>Média</dt><dd id="humidity-mean">--</dd></div>
+            <div><dt>Mediana</dt><dd id="humidity-median">--</dd></div>
+          </dl>
+        </article>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="section-heading"><div><p class="eyebrow">Evolução</p><h2>Temperatura e umidade ao longo do tempo</h2></div></div>
+      <div class="chart-container"><canvas id="history-chart" aria-label="Gráfico de temperatura e umidade"></canvas></div>
+    </section>
+
+    <section class="panel">
+      <div class="section-heading table-heading">
+        <div><p class="eyebrow">Histórico recente</p><h2>Últimas leituras</h2></div>
+        <div class="actions">
+          <button class="button outline" id="clear-table" type="button">🗑 Limpar tabela</button>
+          <button class="button primary" id="export-csv" type="button">⇩ Exportar CSV</button>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Horário</th><th>Temperatura</th><th>Umidade</th><th>Status do ventilador</th></tr></thead>
+          <tbody id="readings-body"></tbody>
+        </table>
+        <p class="empty-message hidden" id="empty-message">A tabela está vazia. Clique em “Nova leitura” para começar.</p>
+      </div>
+    </section>
+
+    <footer><span>Simulador acadêmico</span><span>Atualização automática a cada 5 segundos</span></footer>
+  </main>
+  <script src="monitor.js"></script>
+</body>
+</html>
